@@ -100,11 +100,11 @@ app.post('/farm/add', upload.single('upload'), async (req, res) => {
   const { user_id, description, start, end } = req.body;
   const uploadPath = req.file ? `/uploads/${req.file.filename}` : null;
 
-  if (!user_id || !description || !start || !end || !uploadPath) return res.status(400).send(false);
+  if (!user_id || !title || !description || !start || !end || !uploadPath) return res.status(400).send(false);
 
   try {
     await pool.query(
-      'INSERT INTO farm_info (user_id, description, start, "end", upload) VALUES ($1, $2, $3, $4, $5)',
+      'INSERT INTO farm_info (user_id, title, description, start, "end", upload) VALUES ($1, $2, $3, $4, $5, $6)',
       [user_id, description, start, end, uploadPath]
     );
     res.send(true);
@@ -132,18 +132,19 @@ app.get('/farm/check', async (req, res) => {
 
 // /farm/edit
 app.put('/farm/edit', upload.single('upload'), async (req, res) => {
-  const { id, user_id, description, start, end } = req.body;
+  const { id, user_id, title, description, start, end } = req.body;
   const uploadPath = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
     await pool.query(
       `UPDATE farm_info SET 
-        description = COALESCE($1, description), 
-        start = COALESCE($2, start), 
-        "end" = COALESCE($3, end), 
-        upload = COALESCE($4, upload) 
-      WHERE id = $5 AND user_id = $6`,
-      [description, start, end, uploadPath, id, user_id]
+        title = COALESCE($1, title),
+        description = COALESCE($2, description), 
+        start = COALESCE($3, start), 
+        "end" = COALESCE($4, end), 
+        upload = COALESCE($5, upload) 
+      WHERE id = $6 AND user_id = $7`,
+      [title, description, start, end, uploadPath, id, user_id]
     );
     res.send(true);
   } catch (err) {
