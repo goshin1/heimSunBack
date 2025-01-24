@@ -32,6 +32,10 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
+
+
+
+
 const upload = multer({ storage });
 
 // PostgreSQL 클라이언트 설정
@@ -100,7 +104,7 @@ app.post('/farm/add', upload.single('upload'), async (req, res) => {
 
   try {
     await pool.query(
-      'INSERT INTO farm_info (user_id, description, start, end, upload) VALUES ($1, $2, $3, $4, $5)',
+      'INSERT INTO farm_info (user_id, description, start, "end", upload) VALUES ($1, $2, $3, $4, $5)',
       [user_id, description, start, end, uploadPath]
     );
     res.send(true);
@@ -136,7 +140,7 @@ app.put('/farm/edit', upload.single('upload'), async (req, res) => {
       `UPDATE farm_info SET 
         description = COALESCE($1, description), 
         start = COALESCE($2, start), 
-        end = COALESCE($3, end), 
+        "end" = COALESCE($3, end), 
         upload = COALESCE($4, upload) 
       WHERE id = $5 AND user_id = $6`,
       [description, start, end, uploadPath, id, user_id]
