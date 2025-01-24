@@ -38,6 +38,57 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
+// 라우터 설정
+// /login
+app.post('/login', async (req, res) => {
+  const { user_id, password } = req.body;
+  if (!user_id || !password) return res.status(400).send(false);
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM members WHERE user_id = $1 AND password = $2',
+      [user_id, password]
+    );
+    res.send(result.rows.length > 0);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(false);
+  }
+});
+
+// /sign
+app.post('/sign', async (req, res) => {
+  const { user_id, password, name, email } = req.body;
+  if (!user_id || !password || !name || !email) return res.status(400).send(false);
+
+  try {
+    await pool.query(
+      'INSERT INTO members (user_id, password, name, email) VALUES ($1, $2, $3, $4)',
+      [user_id, password, name, email]
+    );
+    res.send(true);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(false);
+  }
+});
+
+// /duplicate
+app.post('/duplicate', async (req, res) => {
+  const { user_id } = req.body;
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM members WHERE user_id = $1',
+      [user_id]
+    );
+    res.send(result.rows.length === 0);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(false);
+  }
+});
+
 // /farm/add
 app.post('/farm/add', upload.single('upload'), async (req, res) => {
   const { user_id, description, start, end } = req.body;
