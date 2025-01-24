@@ -105,7 +105,7 @@ app.post('/farm/add', upload.single('upload'), async (req, res) => {
   try {
     await pool.query(
       'INSERT INTO farm_info (user_id, title, description, start, "end", upload) VALUES ($1, $2, $3, $4, $5, $6)',
-      [user_id, description, start, end, uploadPath]
+      [user_id, title, description, start, end, uploadPath]
     );
     res.send(true);
   } catch (err) {
