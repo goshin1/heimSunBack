@@ -97,7 +97,7 @@ app.post('/duplicate', async (req, res) => {
 
 // /farm/add
 app.post('/farm/add', upload.single('upload'), async (req, res) => {
-  const { user_id, description, start, end } = req.body;
+  const { user_id, title, description, start, end } = req.body;
   const uploadPath = req.file ? `/uploads/${req.file.filename}` : null;
 
   if (!user_id || !title || !description || !start || !end || !uploadPath) return res.status(400).send(false);
