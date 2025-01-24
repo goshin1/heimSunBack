@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const cors = require('cors');
 const { Pool } = require('pg');
 
 dotenv.config();
@@ -11,6 +12,7 @@ dotenv.config();
 const app = express();
 
 // 미들웨어 설정
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
