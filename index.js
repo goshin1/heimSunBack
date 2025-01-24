@@ -29,7 +29,7 @@ const upload = multer({ storage });
 
 // PostgreSQL 클라이언트 설정
 const pool = new Pool({
-  connectionString: Postgres.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
