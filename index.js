@@ -4,6 +4,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const fs = require('fs');
 
@@ -14,8 +15,9 @@ const app = express();
 
 // 미들웨어 설정
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // 파일 업로드 설정
 const storage = multer.diskStorage({
