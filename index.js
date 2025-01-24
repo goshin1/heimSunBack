@@ -182,8 +182,8 @@ app.post('/farm/month', async (req, res) => {
     const result = await pool.query(
       `SELECT * FROM farm_info 
        WHERE user_id = $1 
-       AND EXTRACT(YEAR FROM TO_TIMESTAMP(start, 'YYYY-MM-DD"T"HH24:MI')) = $2 
-       AND EXTRACT(MONTH FROM TO_TIMESTAMP(start, 'YYYY-MM-DD"T"HH24:MI')) = $3`,
+       AND EXTRACT(YEAR FROM TO_TIMESTAMP(start, 'YYYY-MM-DD')) = $2 
+       AND EXTRACT(MONTH FROM TO_TIMESTAMP(start, 'YYYY-MM-DD')) = $3`,
       [user_id, year, monthNumber]
     );
     res.send(result.rows);
